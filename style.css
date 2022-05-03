@@ -1,0 +1,81 @@
+* {
+  margin: 0;
+  /* A soma feita dentro das boxes (largura conteudo + padding) que seria > 375, com este elemento, independente dos valores de padding, a soma sempre vai dar a largura do conteúdo definido '375'. 
+  Antes a soma era feita a partir do border */
+  box-sizing: border-box;
+}
+:root {
+  /*Variáveis CSS*/
+  --primary-color: #00856f;
+  --secondary-color-headline: #212529;
+  --secodary-color-paragraph: #495057;
+  /* Tamanho da fonte em 100% sobre a Font-Size padrão dos navegadores '16' */
+  font-size: 62.5%; /*62.5% = 10px || (10 * 100) / 16*/
+}
+
+body {
+  font-family: 'DM Sans';
+  /*REM é uma Unidade de Medida Relativa sobre o Font-size, neste caso 1.6rem = 16px*/
+  font-size: 1.6rem;
+
+  text-align: center;
+}
+header {
+  /*Em um dispositivo que seja menor de 375px, poderia colocar um padding, tendo como resultado uma scrollbar laterais*/
+  width: 37.5rem; /*375px*/
+  /*Todo o conteúdo dentro de header, fica centralizado*/
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 4.1rem;
+  /*Como é feito uma soma entre o tamanho dos tamanhos de uma box, tem como mudar isso no reset, pois, pode ser um problema*/
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+h4 {
+  color: var(--primary-color);
+
+  font-size: 1.4rem;
+
+  margin-bottom: 1.6rem;
+}
+h1 {
+  color: var(--secondary-color-headline);
+
+  font-size: 3.4rem;
+  line-height: 130%;
+
+  margin-bottom: 2.4rem;
+}
+p {
+  color: var(--secodary-color-paragraph);
+
+  font-size: 1.8rem;
+  line-height: 15 0%;
+
+  margin-bottom: 3.2rem;
+}
+button {
+  background: var(--primary-color);
+
+  border: none;
+  border-radius: 0.8rem;
+
+  margin-bottom: 6rem;
+  height: 5.2rem;
+  width: 26.3rem;
+
+  border-radius: 4rem;
+  /* Estilos para o texto do botão */
+  color: #ffffff;
+  text-transform: uppercase;
+  font-size: 1.4rem;
+  font-weight: 700;
+  /* Display: flex / Align-items -> Alinha os itens dentro da box / Justify-content -> Conteúdo dentro, será justificado ao centro do pai / gap -> gap entre os conteúdos*/
+  /* Como o button alterou o display: flex, ele muda o comportamento do objeto, automaticamente como display: block, havendo um preenchimento de margin, somente de um lado */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.6rem;
+  margin-right: auto;
+  margin-left: auto;
+}
