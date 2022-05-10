@@ -1,4 +1,9 @@
 /* ===== GERAL =============================================================== */
+html {
+  /* Scroll -> Rolamento | Behavior -> Comportamento | Smooth -> Suave */
+  /* chrome://flags/#smooth-scrolling */
+  scroll-behavior: smooth;
+}
 html,
 body {
   width: 100%;
@@ -9,16 +14,44 @@ body {
   padding: 0;
   /* A soma feita dentro das boxes (largura conteudo + padding) que seria > 375, com este elemento, independente dos valores de padding, a soma sempre vai dar a largura do conteúdo definido '375'. 
   Antes a soma era feita a partir do border */
+  /* A caixa será medida de borda a borda */
   box-sizing: border-box;
 }
+
 :root {
-  /*Variáveis CSS*/
-  --primary-color: #00856f;
+  --hue: 290;
+  /* VERDE PADRÃO
+    --primary-color: #00856f;
   --secondary-color-headline: #212529;
   --secodary-color-paragraph: #495057;
 
   --brand-beige: #fffaf0;
   --brand-light: #dce9e2;
+  --brand-dark: #00473c;
+
+  --background-light: #f6f8f8;
+
+  OU
+
+  --primary-color: hsl(170, 100%, 26%);
+  --secondary-color-headline: hsl(210, 11%, 15%);
+  --secodary-color-paragraph: hsl(210, 9%, 31%);
+
+  --brand-beige: hsl(39, 100%, 97%);
+  --brand-light: hsl(148, 23%, 89%);
+  --brand-dark: hsl(170, 100%, 14%);
+  */
+
+  /*Variáveis CSS*/
+  --primary-color: hsl(var(--hue), 100%, 26%);
+  --secondary-color-headline: hsl(210, 11%, 15%);
+  --secodary-color-paragraph: hsl(210, 9%, 31%);
+
+  --brand-beige: hsl(39, 100%, 97%);
+  --brand-light: hsl(calc(var(--hue) - 22), 23%, 89%);
+  --brand-dark: hsl(var(--hue), 100%, 14%);
+
+  --background-light: #f6f8f8;
 
   --nav-height: 7.2rem;
   /* Tamanho da fonte em 100% sobre a Font-Size padrão dos navegadores '16' */
@@ -33,12 +66,14 @@ body {
   text-align: center;
   /* Sobrepoe o scrollbar, não levando em consideração */
   overflow: overlay;
+
+  background: var(--background-light);
 }
 
 .wrapper {
   /*Em um dispositivo que seja menor de 375px, poderia colocar um padding, tendo como resultado uma scrollbar laterais*/
-  width: 37.5rem; /*375px*/
-  /*Todo o conteúdo dentro de header, fica centralizado
+  /* width: 37.5rem; -> isso estava desregulando quando a tela fosse menor que 375px*/
+  /*Todo o conteúdo dentro de header, fica centralizado -> Agora section, pois, foi encontrado um padão em todo o projeto
   margin-left: auto;
   margin-right: auto;*/
   margin-inline: auto;
@@ -49,43 +84,29 @@ ul {
   list-style: none;
 }
 
-/* ===== HEADER ================================================================= */
-header {
-  /*Como é feito uma soma entre o tamanho dos tamanhos de uma box, tem como mudar isso no reset, pois, pode ser um problema
-  padding-left: 2rem;
-  padding-right: 2rem;
-  */
-  /* Cálculo do margin-top (tam. de Welcome) + Tamanho do navbar */
-  margin-top: calc(4.1rem + var(--nav-height));
+section {
+  padding-block: 10rem;
 }
-/* Header antes do conteúdo do header */ /*Criando tags HTML no CSS*/
-header::before {
-  /* Antes de todo conteúdo do header, colocar um conetúdo vazio */
-  content: '';
 
-  width: 100%;
-  height: calc(108rem + var(--nav-height));
-
-  background: var(--brand-light);
-  /*Todo elemento precisa ter um display, pois, sem ele, não ficará visível*/
-  /* Como estamos fazendo no header, ele irá ficar no limite do header, agora se eu quiser que o limite seja do dispositivo(Linha 141) */
-  display: block;
-  position: absolute;
-  /* Por estar usando position: absolute, ele permite usar top, left, ..., pois, assim ele está sobrescrevendo qualquer coisa */
-  top: 0;
-  left: 0;
-  /* Profundidade é 0, para todos estarem na mesma "página", ao colocar -1, ele colocará na folha de trás. 
-    X horizonte Y vertical Z profundidade */
-  z-index: -1;
-}
-header h4 {
+section header h4 {
   color: var(--primary-color);
 
   font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 150%;
+  letter-spacing: 0.08rem;
+
+  text-transform: uppercase;
 
   margin-bottom: 1.6rem;
 }
-header h1 {
+section header h2 {
+  font-size: 3rem;
+  line-height: 3.9rem;
+
+  color: var(--secondary-color-headline);
+}
+section header h1 {
   color: var(--secondary-color-headline);
 
   font-size: 3.4rem;
@@ -93,23 +114,35 @@ header h1 {
 
   margin-bottom: 2.4rem;
 }
-header p {
-  color: var(--secodary-color-paragraph);
-
-  font-size: 1.8rem;
+section .content p {
+  font-weight: 400;
+  font-size: 1.6rem;
   line-height: 150%;
 
-  margin-bottom: 3.2rem;
+  color: var(--secodary-color-paragraph);
 }
-header button {
+
+img {
+  max-width: 100%;
+}
+
+.button {
   background: var(--primary-color);
 
   border: none;
   border-radius: 4rem;
 
   margin-bottom: 6rem;
-  height: 6.2rem;
-  width: 26.3rem;
+
+  /* Quando definimos o tamanho, caso tivesse algum button que tenha mais informações, ele espreme tentando encaixar tudo dentro do limite
+    https://prnt.sc/9PMDZ3kfnWYB
+  height: 5.2rem;
+  width: 26.3rem; 
+  */
+  padding: 1.6rem 3.2rem;
+  /* Como tem display: flex (l 128) para o conteúdo do botão, o botão em sim, por fora é block, e no block ele pega tudo o 100%.
+    Usando o width fit-content, ele continua block, mas, ao invés de pegar 100%, ele de adapta ao conteúdo de dentro, calculando padding */
+  width: fit-content;
 
   /* Estilos para o texto do botão */
   color: #ffffff;
@@ -122,49 +155,33 @@ header button {
   align-items: center;
   justify-content: center;
   gap: 1.6rem;
-  margin-right: auto;
-  margin-left: auto;
-}
-header img {
-  /* Por ter usado o object-position, quando a foto é menor, o conteúdo da imagem não acompanha, ficando maior */
-  width: 26.4rem;
 
-  display: block;
-  margin-inline: auto;
-  /* Object-Position -> Objeto(imagem) dentro da box(img)*/
-  object-position: 0 2rem;
+  text-decoration: none;
+
+  transition: background 200ms;
+}
+.button:hover {
+  background: var(--brand-dark);
 }
 
-div.stats {
-  width: 32.7rem;
-  /* Padding-Block: xrem => Referencia a extremidade do eixo Y (T/B) */
-  padding-block: 4rem;
-  /* Margin-Inline: auto => Referencia a extremidade do eixo X (L/R) */
-  margin-inline: auto;
-
-  background: var(--brand-beige);
-  border-radius: 0.6rem;
-  border: 1px solid var(--brand-light);
-  /* Display: flex -> Deixa os conteúdos da box um ao lado da outra || Flex-direction: column -> Altera a direção, e ao invés de lado a lado, torna-se um abaixo do outro */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 6rem;
+/* custom colors */
+#services .card circle {
+  fill: var(--brand-light);
 }
-.stat h3 {
-  font-size: 4.8rem;
-  line-height: 130%;
-  color: var(--secondary-color-headline);
-
-  margin-bottom: 0.4rem;
+#navigation .logo path[fill*='#00856F'],
+#backToTopButton circle {
+  fill: var(--primary-color);
 }
-.stat p {
-  /* Estou sobrescrevendo a margin que tinha posto na linha 57 */
-  margin: 0;
-  /* Não coloquei, pois no body, definimos 1.6rem
-  font-size: 1.6rem;*/
-  line-height: 150%;
-  color: var(--primary-color);
+button.open-menu path[stroke*='#00856F'],
+#contact li path {
+  stroke: var(--primary-color);
+}
+body.menu-expanded #navigation .logo path,
+#navigation.scroll .logo path {
+  fill: white;
+}
+#navigation.scroll button.open-menu path[stroke*='#00856F'] {
+  stroke: white;
 }
 
 /* ===== NAVIGATION ===================================================== */
@@ -177,9 +194,12 @@ nav {
   /* Position: Fixed, assim como Absolute, liberam top, left, e afins... */
   position: fixed;
   top: 0;
-  left: 50%;
-  /* Transform: TranslateX(-50%) -> Informo que quero que 50% dos 100% do objeto, fique na linha imaginária X da tela */
-  transform: translateX(-50%);
+  /* left: 50%;
+  /* Transform: TranslateX(-50%) -> Informo que quero que 50% dos 100% do objeto, fique na linha imaginária X da tela 
+  transform: translateX(-50%); */
+  width: 100%;
+
+  z-index: 100;
 }
 nav .wrapper {
   display: flex;
@@ -189,33 +209,37 @@ nav .wrapper {
 nav.scroll {
   background: var(--primary-color);
 
-  width: 100vw;
+  /* width: 100vw; -> Linha 197*/
 
-  position: fixed;
-  top: 0;
+  /* Não precisa mais, pois, no seletor nav (linha 185), define ele no topo */
+  /* position: fixed;
+  top: 0; */
 }
 /* svg:nth-chil(num) -> Defino qual svg quero pegar */
-nav.scroll svg:nth-child(1) path {
+/* nav.scroll .logo path {
   fill: white;
 }
 nav.scroll button path {
   stroke: white;
-}
+} 
+Tiramos por conta do tratamento no Geral
+*/
 
 nav button {
   background: none;
   border: none;
   cursor: pointer;
 }
-
-/* ===== MENU-EXPANDED =========================== */
+/* ===== NAV - MENU-EXPANDED =========================== */
 body.menu-expanded {
   /*Quando houver um transbordamento, falo que não é para ter scroll, não permitindo*/
   overflow: hidden;
 }
 /* Para desaparecer com tudo, com exceção da nav (1° nível) */
 body.menu-expanded > :not(nav) {
-  display: none;
+  /* display: none; || Com este elemento css, ele sai, e quando volta a class="", ele carrega novamente, pois, com display: none, ele tira todos os elementos da tela */
+  /* Desta forma, quando ele abrir e fechar o menu, ele estará no mesmo lugar onde estava */
+  visibility: hidden;
 }
 
 .menu,
@@ -230,6 +254,10 @@ body.menu-expanded .close-menu {
   opacity: 1;
   visibility: visible;
 }
+.menu {
+  /* Menu antes está no 100%, abaixo do visível, depois que ativo, ele finalizará no 0 */
+  transform: translateY(100%);
+}
 body.menu-expanded .menu {
   position: fixed;
   top: 0;
@@ -240,9 +268,9 @@ body.menu-expanded .menu {
   height: 100vh;
 
   padding-top: var(--nav-height);
-}
-body.menu-expanded nav {
-  position: relative;
+  /* Transição de abertura, demorará 300ms até o EixoY = 0 */
+  transition: transform 300ms;
+  transform: translateY(0);
 }
 
 .menu ul:nth-child(1) {
@@ -280,6 +308,12 @@ body.menu-expanded nav {
   margin-top: 4.8rem;
   margin-bottom: 8rem;
 }
+.menu .button:hover {
+  background: var(--primary-color);
+  color: white;
+
+  filter: brightness(1.3);
+}
 
 .social-links {
   display: flex;
@@ -298,4 +332,257 @@ body.menu-expanded .logo path {
 }
 body.menu-expanded button path {
   stroke: white;
+}
+
+/* ===== HEADER -> HOME = SECTION ================================================================= */
+#home {
+  /*Como é feito uma soma entre o tamanho dos tamanhos de uma box, tem como mudar isso no reset, pois, pode ser um problema
+  padding-left: 2rem;
+  padding-right: 2rem;
+  */
+  /* Cálculo do margin-top (tam. de Welcome) + Tamanho do navbar */
+  padding-top: calc(4.1rem + var(--nav-height));
+}
+/* SECTION antes do conteúdo do SECTION */ /*Criando tags HTML no CSS*/
+#home::before {
+  /* Antes de todo conteúdo do header, colocar um conetúdo vazio */
+  content: '';
+
+  width: 100%;
+  height: calc(108rem + var(--nav-height));
+
+  background: var(--brand-light);
+  /*Todo elemento precisa ter um display, pois, sem ele, não ficará visível*/
+  /* Como estamos fazendo no header, ele irá ficar no limite do header, agora se eu quiser que o limite seja do dispositivo(Linha 141) */
+  display: block;
+  position: absolute;
+  /* Por estar usando position: absolute, ele permite usar top, left, ..., pois, assim ele está sobrescrevendo qualquer coisa */
+  top: 0;
+  left: 0;
+  /* Profundidade é 0, para todos estarem na mesma "página", ao colocar -1, ele colocará na folha de trás. 
+    X horizonte Y vertical Z profundidade */
+  z-index: -1;
+}
+/* #home h4 {
+  color: var(--primary-color);
+
+  font-size: 1.4rem;
+
+  margin-bottom: 1.6rem;
+} */
+/* #home h1 {
+  color: var(--secondary-color-headline);
+
+  font-size: 3.4rem;
+  line-height: 130%;
+
+  margin-bottom: 2.4rem;
+} */
+#home p {
+  color: var(--secodary-color-paragraph);
+
+  font-size: 1.8rem;
+  line-height: 150%;
+
+  margin-bottom: 3.2rem;
+}
+/* #home button {
+  background: var(--primary-color);
+
+  border: none;
+  border-radius: 4rem;
+
+  margin-bottom: 6rem;
+  height: 6.2rem;
+  width: 26.3rem;
+
+  /* Estilos para o texto do botão */
+/* color: #ffffff;
+  text-transform: uppercase;
+  font-size: 1.4rem;
+  font-weight: 700; */
+/* Display: flex / Align-items -> Alinha os itens dentro da box / Justify-content -> Conteúdo dentro, será justificado ao centro do pai / gap -> gap entre os conteúdos*/
+/* Como o button alterou o display: flex, ele muda o comportamento do objeto, automaticamente como display: block, havendo um preenchimento de margin, somente de um lado */
+/* display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.6rem;
+  margin-right: auto;
+  margin-left: auto; */
+/* } */
+#home .button {
+  /* margin-right: auto;
+  margin-left: auto; */
+  margin-inline: auto;
+}
+#home img {
+  /* Por ter usado o object-position, quando a foto é menor, o conteúdo da imagem não acompanha, ficando maior */
+  width: 26.4rem;
+
+  display: block;
+  margin-inline: auto;
+  /* Object-Position -> Objeto(imagem) dentro da box(img)*/
+  object-position: 0 2rem;
+}
+
+#home div.stats {
+  width: 32.7rem;
+  /* Padding-Block: xrem => Referencia a extremidade do eixo Y (T/B) */
+  padding-block: 4rem;
+  /* Margin-Inline: auto => Referencia a extremidade do eixo X (L/R) */
+  margin-inline: auto;
+
+  background: var(--brand-beige);
+  border-radius: 0.6rem;
+  border: 1px solid var(--brand-light);
+  /* Display: flex -> Deixa os conteúdos da box um ao lado da outra || Flex-direction: column -> Altera a direção, e ao invés de lado a lado, torna-se um abaixo do outro */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6rem;
+}
+#home .stat h3 {
+  font-size: 4.8rem;
+  line-height: 130%;
+  color: var(--secondary-color-headline);
+
+  margin-bottom: 0.4rem;
+}
+#home .stat p {
+  /* Estou sobrescrevendo a margin que tinha posto na linha 57 */
+  margin: 0;
+  /* Não coloquei, pois no body, definimos 1.6rem
+  font-size: 1.6rem;*/
+  line-height: 150%;
+  color: var(--primary-color);
+}
+
+/* ===== SECTION - SERVICES ========================= */
+/* #services header h4 {
+  font-size: 1.4rem;
+  line-height: 150%;
+  letter-spacing: 0.08rem;
+
+  color: var(--primary-color);
+
+  text-transform: uppercase;
+
+  margin-bottom: 1.6rem;
+} */
+/* #services header h2 {
+  font-size: 3rem;
+  line-height: 3.9rem;
+
+  color: var(--secondary-color-headline);
+
+  margin-bottom: 6rem;
+} */
+#services header h2 {
+  margin-bottom: 6rem;
+}
+#services .cards {
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+}
+#services .card {
+  padding: 2.4rem;
+
+  text-align: left;
+
+  background: white;
+
+  border: 1px solid var(--brand-light);
+  border-radius: 0.6rem;
+}
+#services .card h3 {
+  margin-block: 1.6rem;
+}
+
+/* ===== ABOUT ========================= */
+#about {
+  text-align: left;
+
+  background: var(--brand-beige);
+}
+#about header h2 {
+  margin-bottom: 2.4rem;
+}
+#about .content p {
+  margin-block: 2.4rem 6rem;
+}
+
+/* ===== CONTACT ========================= */
+#contact {
+  text-align: left;
+}
+#contact header {
+  margin-bottom: 3.2rem;
+}
+#contact ul {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+
+  margin-bottom: 3.2rem;
+}
+#contact ul li {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+/* ===== FOOTER ========================= */
+footer {
+  background: var(--primary-color);
+
+  padding-block: 6rem;
+
+  text-align: left;
+
+  color: white;
+}
+footer .logo {
+  display: inline-block;
+  margin-bottom: 2.4rem;
+}
+footer .logo svg {
+  width: 23.6rem;
+  height: 3.1rem;
+}
+footer .logo path {
+  fill: white;
+}
+footer p {
+  color: var(--brand-beige);
+
+  line-height: 2;
+
+  margin-bottom: 3.2rem;
+}
+footer .social-links {
+  /* flex-start -> do início */
+  justify-content: flex-start;
+}
+
+/* BACK TO TOP */
+#backToTopButton {
+  position: fixed;
+
+  bottom: 1rem;
+  right: 2.5rem;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transform: translateY(100%); /* coloca fora da página */
+  transition: 250ms;
+}
+#backToTopButton.show {
+  opacity: 1;
+  visibility: visible;
+
+  transform: translateY(
+    0
+  ); /* quando tiver o .show, ele volta para posicao inicial */
 }
