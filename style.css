@@ -73,6 +73,7 @@ body {
 .wrapper {
   /*Em um dispositivo que seja menor de 375px, poderia colocar um padding, tendo como resultado uma scrollbar laterais*/
   /* width: 37.5rem; -> isso estava desregulando quando a tela fosse menor que 375px*/
+  width: min(50rem, 100%);
   /*Todo o conteúdo dentro de header, fica centralizado -> Agora section, pois, foi encontrado um padão em todo o projeto
   margin-left: auto;
   margin-right: auto;*/
@@ -230,6 +231,11 @@ nav button {
   border: none;
   cursor: pointer;
 }
+
+.menu,
+.close-menu {
+  position: fixed;
+}
 /* ===== NAV - MENU-EXPANDED =========================== */
 body.menu-expanded {
   /*Quando houver um transbordamento, falo que não é para ter scroll, não permitindo*/
@@ -259,7 +265,7 @@ body.menu-expanded .close-menu {
   transform: translateY(100%);
 }
 body.menu-expanded .menu {
-  position: fixed;
+  /* position: fixed; */
   top: 0;
   left: 0;
   background: var(--primary-color);
@@ -426,7 +432,7 @@ body.menu-expanded button path {
 }
 
 #home div.stats {
-  width: 32.7rem;
+  width: 100%;
   /* Padding-Block: xrem => Referencia a extremidade do eixo Y (T/B) */
   padding-block: 4rem;
   /* Margin-Inline: auto => Referencia a extremidade do eixo X (L/R) */
@@ -585,4 +591,47 @@ footer .social-links {
   transform: translateY(
     0
   ); /* quando tiver o .show, ele volta para posicao inicial */
+}
+
+/* ===== MEDIA - RESPONSIVO ========================== */
+/* MEDIA - Vai colocar quando o dispositivo tiver uma largura mínima de 1024px*/
+@media (min-width: 1024px) {
+  /* ===== GERAL ========================== */
+  .wrapper {
+    width: min(112rem, 100%);
+  }
+
+  /* ===== NAVIGATION ========================== */
+
+  /* reset */
+  nav#navigation .wrapper * {
+    margin: 0;
+    padding: 0;
+
+    visibility: initial;
+    opacity: initial;
+
+    display: initial;
+    flex-direction: initial;
+
+    position: initial;
+
+    font-size: initial;
+    font-weight: initial;
+    transform: initial;
+    color: initial;
+    background-color: initial;
+  }
+
+  nav#navigation .close-menu,
+  nav#navigation .open-menu,
+  nav#navigation .social-links {
+    display: none;
+  }
+
+  nav#navigation .menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
